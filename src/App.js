@@ -1,13 +1,15 @@
 import React from 'react';
 import './App.css';
+import Form from './components/Form';
 import Table from './components/Table';
-import TableProvider from './context/TableProvider';
+import Provider from './context/Provider';
 
 function App() {
   return (
-    <TableProvider>
+    <Provider>
+      <Form />
       <Table />
-    </TableProvider>
+    </Provider>
   );
 }
 
