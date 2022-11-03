@@ -29,16 +29,12 @@ export default function Provider({ children }) {
     switch (filterComparison) {
     case 'maior que': {
       return setDataAPI(
-        dataAPI.filter(
-          (el) => Number(el[filterColumn]) > Number(filterValue),
-        ),
+        dataAPI.filter((el) => Number(el[filterColumn]) > Number(filterValue)),
       );
     }
     case 'menor que': {
       return setDataAPI(
-        dataAPI.filter(
-          (el) => Number(el[filterColumn]) < Number(filterValue),
-        ),
+        dataAPI.filter((el) => Number(el[filterColumn]) < Number(filterValue)),
       );
     }
     case 'igual a': {
@@ -54,16 +50,11 @@ export default function Provider({ children }) {
   }, [filterColumn, filterComparison, filterValue, dataAPI]);
 
   const fetchAPI = async () => {
-    try {
-      const url = 'https://swapi.dev/api/planets';
-      const response = await fetch(url);
-      const { results } = await response.json();
-      results.filter((planet) => planet.residents && delete planet.residents);
-      setDataAPI(results);
-      // console.log(results);
-    } catch (error) {
-      throw new Error(error);
-    }
+    const url = 'https://swapi.dev/api/planets';
+    const response = await fetch(url);
+    const { results } = await response.json();
+    results.filter((planet) => planet.residents && delete planet.residents);
+    setDataAPI(results);
   };
 
   useEffect(() => {
@@ -86,14 +77,12 @@ export default function Provider({ children }) {
     [
       dataAPI,
       filterName,
-      filterColumn,
       filterValue,
+      filterColumn,
       filterComparison,
       handleClickFilter,
     ],
   );
-
-  // console.log(contextValue);
 
   return <Context.Provider value={ contextValue }>{children}</Context.Provider>;
 }
