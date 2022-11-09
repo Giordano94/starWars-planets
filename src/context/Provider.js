@@ -18,7 +18,7 @@ export default function Provider({ children }) {
   const [filterComparison, setFilterComparison] = useState('maior que');
   const [noRepeatColumn, setNoRepeatColumns] = useState(DEFAULT_OPTIONS_LIST);
   const [filtersOnScreen, setFiltersOnScreen] = useState([]);
-  const [returnDefault, setReturnDefault] = useState([]);
+  const [returnApiDefault, setReturnApiDefault] = useState([]);
 
   const handleFilterByName = (name) => {
     setFilterName(name);
@@ -60,7 +60,6 @@ export default function Provider({ children }) {
       );
       setDataAPI(equalTo);
     }
-    setReturnDefault(dataAPI);
     const listFiltersOnScreen = [
       ...filtersOnScreen,
       {
@@ -86,15 +85,16 @@ export default function Provider({ children }) {
     const { results } = await response.json();
     results.filter((planet) => planet.residents && delete planet.residents);
     setDataAPI(results);
-    // setReturnDefault(results);
+    setReturnApiDefault(results);
   };
 
-  const buttonRemoveFilters = async () => {
+  const buttonRemoveFilters = useCallback(async () => {
+    setDataAPI(returnApiDefault);
     setFiltersOnScreen([]);
     setFilterColumn(DEFAULT_OPTIONS_LIST[0]);
     setNoRepeatColumns(DEFAULT_OPTIONS_LIST);
     setFilterValue(0);
-  };
+  }, [returnApiDefault]);
 
   useEffect(() => {
     fetchAPI();
@@ -108,7 +108,7 @@ export default function Provider({ children }) {
       filterColumn,
       noRepeatColumn,
       filterComparison,
-      returnDefault,
+      returnApiDefault,
       filtersOnScreen,
       setFiltersOnScreen,
       handleFilterByName,
@@ -125,9 +125,10 @@ export default function Provider({ children }) {
       filterColumn,
       noRepeatColumn,
       filterComparison,
-      returnDefault,
+      returnApiDefault,
       filtersOnScreen,
       handleClickFilter,
+      buttonRemoveFilters,
     ],
   );
 
@@ -137,24 +138,3 @@ export default function Provider({ children }) {
 Provider.propTypes = {
   children: PropTypes.node.isRequired,
 };
-
-// Mudança na lógica dos filtros pois não consegui testar o switch case e foi recomendado pelos instrutores a usar if e else
-/*   switch (filterComparison) {
-    case 'maior que': {
-      return setDataAPI(
-        dataAPI.filter((el) => Number(el[filterColumn]) > Number(filterValue)),
-      );
-    }
-    case 'menor que': {
-      return setDataAPI(
-        dataAPI.filter((el) => Number(el[filterColumn]) < Number(filterValue)),
-      );
-    }
-    default: {
-      return setDataAPI(
-        dataAPI.filter(
-          (el) => Number(el[filterColumn]) === Number(filterValue),
-        ),
-      );
-    }
-    } */
