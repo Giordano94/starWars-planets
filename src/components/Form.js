@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import Context from '../context/Context';
 
 export default function Form() {
@@ -7,6 +7,39 @@ export default function Form() {
   const { filterValue, handleFilterByValue } = useContext(Context);
   const { filterComparison, handleFilterByComparison } = useContext(Context);
   const { handleClickFilter } = useContext(Context);
+  const { noRepeatColumn, buttonRemoveFilters } = useContext(Context);
+  const { filtersOnScreen, setFiltersOnScreen } = useContext(Context);
+
+  const btnRemoveOnlyOneFilter = (column) => {
+    const filter = filtersOnScreen.filter((el) => {
+      console.log(el);
+      console.log(column);
+      return el.filterColumn !== column;
+    });
+    setFiltersOnScreen(filter);
+    console.log(filter);
+  };
+
+  const filters = useMemo(() => {
+    if (filtersOnScreen.length === 0) {
+      return null;
+    }
+    return filtersOnScreen.map((filter, index) => {
+      console.log('filter', filter);
+      return (
+        <p key={ index } >
+          {`${filter.filterColumn} ${filter.filterComparison} ${filter.filterValue}`}
+          <button
+            type="button"
+            onClick={ () => btnRemoveOnlyOneFilter(filter.filterColumn) }
+          >
+            Remove
+          </button>
+        </p>
+      );
+    });
+  }, [btnRemoveOnlyOneFilter, filtersOnScreen]);
+
   return (
     <form action="">
       <input
@@ -23,11 +56,11 @@ export default function Form() {
           value={ filterColumn }
           onChange={ ({ target }) => handleFilterByColumn(target.value) }
         >
-          <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+          {noRepeatColumn.map((option, i) => (
+            <option key={ i } value={ option }>
+              {option}
+            </option>
+          ))}
         </select>
       </label>
 
@@ -60,6 +93,15 @@ export default function Form() {
       >
         FILTRAR
       </button>
+
+      <button
+        type="button"
+        data-testid="button-remove-filters"
+        onClick={ buttonRemoveFilters }
+      >
+        REMOVER FILTROS
+      </button>
+      <div>{filters}</div>
     </form>
   );
 }
