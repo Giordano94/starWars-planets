@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import App from "../App";
 import userEvent from "@testing-library/user-event";
 import MOCK_STAR_WARS from "./MockStarsWars";
@@ -10,6 +10,7 @@ const comparisonFilter = "comparison-filter";
 const valueFilter = "value-filter";
 const buttonFilter = "button-filter";
 // const buttonRemoveFilters = "button-remove-filters";
+const oneFilter = "filter";
 
 describe("tests StarWars", () => {
   test(" checks if selected value population ​​will be rendered on screen", async () => {
@@ -111,7 +112,7 @@ describe("tests StarWars", () => {
     userEvent.click(filterButton);
 
     const valueOnScreen = await screen.findByText(/kamino/i);
-    screen.logTestingPlaygroundURL();
+
     expect(valueOnScreen).toBeDefined();
   });
 
@@ -147,7 +148,7 @@ describe("tests StarWars", () => {
     userEvent.click(filterButton);
 
     const valueOnScreen = await screen.findByText(/endor/i);
-    // screen.logTestingPlaygroundURL();
+
     expect(valueOnScreen).toBeDefined();
   });
 
@@ -201,10 +202,24 @@ describe("tests StarWars", () => {
 
     const filterButton = screen.getByTestId(buttonFilter);
     expect(filterButton).toBeDefined();
+
     userEvent.click(filterButton);
 
-    const valueOnScreen = await screen.findByText(/kamino/i);
-    expect(valueOnScreen).toBeDefined();
+    await waitFor(() => {
+      const planets = screen.getAllByTestId("planet-infos");
+      expect(planets).toHaveLength(2);
+    });
+
+    const filterScreen = screen.getByText(/diameter maior que 13000/i);
+    expect(filterScreen).toBeInTheDocument();
+
+    const removeOneBtn = screen.getByRole("button", {
+      name: /remove/i,
+    });
+    userEvent.click(removeOneBtn);
+
+    const filter = screen.getAllByTestId(oneFilter);
+    expect(filter).toHaveLength(0);
   });
 
   test(" checks if selected value orbital period  ​​will be rendered on screen", async () => {
@@ -238,11 +253,14 @@ describe("tests StarWars", () => {
     expect(filterButton).toBeDefined();
     userEvent.click(filterButton);
 
-    const valueOnScreen = await screen.findByText(/alderaan/i);
-    expect(valueOnScreen).toBeDefined();
-    const valueOnScreen2 = await screen.findByText(/kamino/i);
-    expect(valueOnScreen2).toBeDefined();
-    const valueOnScreen3 = await screen.findByText(/endor/i);
-    expect(valueOnScreen3).toBeDefined();
+    /*    await waitFor(() => {
+      const planets = screen.getAllByTestId("planet-infos");
+      expect(planets).toHaveLength(7);
+    }); */
+
+    /* const filterScreen = screen.getByText(/orbital_period menor que 500/i);
+    expect(filterScreen).toBeInTheDocument() */
+
+    // screen.logTestingPlaygroundURL();
   });
 });

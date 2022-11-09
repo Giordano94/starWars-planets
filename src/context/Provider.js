@@ -60,6 +60,7 @@ export default function Provider({ children }) {
       );
       setDataAPI(equalTo);
     }
+    setReturnDefault(dataAPI);
     const listFiltersOnScreen = [
       ...filtersOnScreen,
       {
@@ -85,6 +86,7 @@ export default function Provider({ children }) {
     const { results } = await response.json();
     results.filter((planet) => planet.residents && delete planet.residents);
     setDataAPI(results);
+    // setReturnDefault(results);
   };
 
   const buttonRemoveFilters = async () => {
@@ -106,6 +108,7 @@ export default function Provider({ children }) {
       filterColumn,
       noRepeatColumn,
       filterComparison,
+      returnDefault,
       filtersOnScreen,
       setFiltersOnScreen,
       handleFilterByName,
@@ -122,6 +125,7 @@ export default function Provider({ children }) {
       filterColumn,
       noRepeatColumn,
       filterComparison,
+      returnDefault,
       filtersOnScreen,
       handleClickFilter,
     ],

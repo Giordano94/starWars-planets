@@ -27,7 +27,7 @@ export default function Table() {
         {dataAPI
           ?.filter(({ name }) => name.toLowerCase().includes(filterName.toLowerCase()))
           .map((planet) => (
-            <tr key={ planet.name }>
+            <tr data-testid="planet-infos" key={ planet.name }>
               <td>{planet.name}</td>
               <td>{planet.rotation_period}</td>
               <td>{planet.orbital_period}</td>

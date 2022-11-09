@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useCallback } from 'react';
 import Context from '../context/Context';
 
 export default function Form() {
@@ -10,34 +10,29 @@ export default function Form() {
   const { noRepeatColumn, buttonRemoveFilters } = useContext(Context);
   const { filtersOnScreen, setFiltersOnScreen } = useContext(Context);
 
-  const btnRemoveOnlyOneFilter = (column) => {
-    const filter = filtersOnScreen.filter((el) => {
-      console.log(el);
-      console.log(column);
-      return el.filterColumn !== column;
-    });
-    setFiltersOnScreen(filter);
-    console.log(filter);
-  };
+  const btnRemoveOnlyOneFilter = useCallback(
+    (column) => {
+      const filter = filtersOnScreen.filter((el) => el.filterColumn !== column);
+      setFiltersOnScreen(filter);
+    },
+    [filtersOnScreen, setFiltersOnScreen],
+  );
 
   const filters = useMemo(() => {
     if (filtersOnScreen.length === 0) {
       return null;
     }
-    return filtersOnScreen.map((filter, index) => {
-      console.log('filter', filter);
-      return (
-        <p key={ index } >
-          {`${filter.filterColumn} ${filter.filterComparison} ${filter.filterValue}`}
-          <button
-            type="button"
-            onClick={ () => btnRemoveOnlyOneFilter(filter.filterColumn) }
-          >
-            Remove
-          </button>
-        </p>
-      );
-    });
+    return filtersOnScreen.map((filter, index) => (
+      <p key={ index } data-testid="filter">
+        {`${filter.filterColumn} ${filter.filterComparison} ${filter.filterValue}`}
+        <button
+          type="button"
+          onClick={ () => btnRemoveOnlyOneFilter(filter.filterColumn) }
+        >
+          Remove
+        </button>
+      </p>
+    ));
   }, [btnRemoveOnlyOneFilter, filtersOnScreen]);
 
   return (
