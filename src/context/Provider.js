@@ -84,7 +84,6 @@ export default function Provider({ children }) {
     const { results } = await response.json();
     results.filter((planet) => planet.residents && delete planet.residents);
     setDataAPI(results);
-    console.log(results);
     setReturnApiDefault(results);
   };
 
