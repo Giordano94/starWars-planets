@@ -9,7 +9,7 @@ const columnFilter = "column-filter";
 const comparisonFilter = "comparison-filter";
 const valueFilter = "value-filter";
 const buttonFilter = "button-filter";
-// const buttonRemoveFilters = "button-remove-filters";
+const buttonRemoveAll = "button-remove-filters";
 const oneFilter = "filter";
 
 describe("tests StarWars", () => {
@@ -222,7 +222,7 @@ describe("tests StarWars", () => {
     expect(filter).toHaveLength(0);
   });
 
-  test(" checks if selected value orbital period  ​​will be rendered on screen", async () => {
+  test.only(" checks if selected value orbital period  ​​will be rendered on screen", async () => {
     jest.spyOn(global, "fetch");
     global.fetch.mockResolvedValue({
       json: jest.fn().mockResolvedValue(MOCK_STAR_WARS),
@@ -232,6 +232,10 @@ describe("tests StarWars", () => {
 
     expect(global.fetch).toHaveBeenCalled();
     expect(global.fetch).toHaveBeenCalledTimes(1);
+
+    await waitFor(() => {
+      expect(screen.getAllByRole("row")).toHaveLength(11);
+    });
 
     const valueColum = "orbital_period";
     const selectColumn = screen.getByTestId(columnFilter);
@@ -253,13 +257,76 @@ describe("tests StarWars", () => {
     expect(filterButton).toBeDefined();
     userEvent.click(filterButton);
 
-    /*    await waitFor(() => {
+    await waitFor(() => {
       const planets = screen.getAllByTestId("planet-infos");
       expect(planets).toHaveLength(7);
-    }); */
+    });
 
     /* const filterScreen = screen.getByText(/orbital_period menor que 500/i);
     expect(filterScreen).toBeInTheDocument() */
+
+    // screen.logTestingPlaygroundURL();
+  });
+
+  test.only(" test if the button removes all filters ", async () => {
+    jest.spyOn(global, "fetch");
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(MOCK_STAR_WARS),
+    });
+
+    render(<App />);
+
+    expect(global.fetch).toHaveBeenCalled();
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+
+    await waitFor(() => {
+      expect(screen.getAllByRole("row")).toHaveLength(11);
+    });
+
+    const selectColumn = screen.getByTestId(columnFilter);
+    userEvent.selectOptions(selectColumn, "population");
+
+    const selectComparison = screen.getByTestId(comparisonFilter);
+    userEvent.selectOptions(selectComparison, "maior que");
+
+    const inputValue = screen.getByTestId(valueFilter);
+    userEvent.type(inputValue, "999");
+
+    const filterButton = screen.getByTestId(buttonFilter);
+    expect(filterButton).toBeDefined();
+    userEvent.click(filterButton);
+    /*
+    userEvent.selectOptions(selectColumn, "rotation_period");
+    userEvent.selectOptions(selectComparison, "menor que");
+    userEvent.clear;
+    userEvent.type(inputValue, "25");
+    userEvent.click(filterButton);
+
+    userEvent.selectOptions(selectColumn, "orbital_period");
+    userEvent.selectOptions(selectComparison, "igual a");
+    userEvent.clear;
+    userEvent.type(inputValue, "4818");
+    userEvent.click(filterButton);
+ */
+
+    await waitFor(() => {
+      expect(screen.getAllByRole("row")).toHaveLength(9);
+    });
+
+    await waitFor(() => {
+      const planets = screen.getAllByTestId("planet-infos");
+      expect(planets).toHaveLength(8);
+    });
+
+    const removeAll = screen.getByTestId(buttonRemoveAll);
+    expect(removeAll).toBeInTheDocument();
+    userEvent.click(removeAll);
+
+    await waitFor(() => {
+      expect(screen.getAllByRole("row")).toHaveLength(11);
+    });
+
+    expect(inputValue).toHaveValue(0);
 
     // screen.logTestingPlaygroundURL();
   });

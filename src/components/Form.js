@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useCallback } from 'react';
+import React, { useContext, useMemo, useCallback, useState } from 'react';
 import Context from '../context/Context';
 
 export default function Form() {
@@ -6,16 +6,34 @@ export default function Form() {
   const { filterColumn, handleFilterByColumn } = useContext(Context);
   const { filterValue, handleFilterByValue } = useContext(Context);
   const { filterComparison, handleFilterByComparison } = useContext(Context);
-  const { handleClickFilter } = useContext(Context);
-  const { noRepeatColumn, buttonRemoveFilters } = useContext(Context);
+  const { handleClickFilter, setNoRepeatColumns } = useContext(Context);
+  const { noRepeatColumn, buttonRemoveFilters, setFilterColumn } = useContext(Context);
   const { filtersOnScreen, setFiltersOnScreen } = useContext(Context);
+  const [stateComparison] = useState(noRepeatColumn);
 
   const btnRemoveOnlyOneFilter = useCallback(
     (column) => {
       const filter = filtersOnScreen.filter((el) => el.filterColumn !== column);
+      console.log('filter', filter);
+      console.log('column', column);
       setFiltersOnScreen(filter);
+      const options = stateComparison.filter(
+        (el) => !filter.map((item) => item.filterColumn).includes(el),
+      );
+      console.log('stateComparison', stateComparison);
+      console.log('options', options);
+      console.log('noRepeatColumn', noRepeatColumn);
+      setNoRepeatColumns(options);
+      setFilterColumn(options[0]);
     },
-    [filtersOnScreen, setFiltersOnScreen],
+    [
+      filtersOnScreen,
+      noRepeatColumn,
+      setFilterColumn,
+      setFiltersOnScreen,
+      setNoRepeatColumns,
+      stateComparison,
+    ],
   );
 
   const filters = useMemo(() => {

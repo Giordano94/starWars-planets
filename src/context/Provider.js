@@ -38,7 +38,6 @@ export default function Provider({ children }) {
 
   const handleClickFilter = useCallback(() => {
     const filtered = noRepeatColumn.filter((option) => option !== filterColumn);
-
     setNoRepeatColumns(filtered);
     setFilterColumn(filtered[0]);
 
@@ -85,6 +84,7 @@ export default function Provider({ children }) {
     const { results } = await response.json();
     results.filter((planet) => planet.residents && delete planet.residents);
     setDataAPI(results);
+    console.log(results);
     setReturnApiDefault(results);
   };
 
@@ -111,6 +111,8 @@ export default function Provider({ children }) {
       returnApiDefault,
       filtersOnScreen,
       setFiltersOnScreen,
+      setFilterColumn,
+      setNoRepeatColumns,
       handleFilterByName,
       handleFilterByValue,
       handleFilterByColumn,
