@@ -11,6 +11,7 @@ const valueFilter = "value-filter";
 const buttonFilter = "button-filter";
 const buttonRemoveAll = "button-remove-filters";
 const oneFilter = "filter";
+const buttonRemoveOne = "remove-only-one";
 
 describe("tests StarWars", () => {
   test(" checks if selected value population ​​will be rendered on screen", async () => {
@@ -93,7 +94,6 @@ describe("tests StarWars", () => {
       const planets = screen.getAllByTestId("planet-infos");
       expect(planets).toHaveLength(3);
     });
-
   });
 
   test(" checks if selected value rotation period ​​will be rendered on screen", async () => {
@@ -126,8 +126,6 @@ describe("tests StarWars", () => {
     const filterButton = screen.getByTestId(buttonFilter);
     expect(filterButton).toBeDefined();
     userEvent.click(filterButton);
-
-
   });
 
   test("checks if selected value surface water ​​will be rendered on screen", async () => {
@@ -234,15 +232,13 @@ describe("tests StarWars", () => {
       expect(planets).toHaveLength(2);
     });
 
-     const filterScreen = screen.getAllByTestId(oneFilter);
+    const filterScreen = screen.getAllByTestId(oneFilter);
     expect(filterScreen).toHaveLength(1);
 
-
-  /*  const removeOneBtn = screen.getAllByText(/Remove/i);
+    const removeOneBtn = screen.getByTestId(buttonRemoveOne);
     userEvent.click(removeOneBtn);
 
-    const filter = screen.getAllByTestId(oneFilter);
-    expect(filter).toHaveLength(0); */
+  
   });
 
   test(" checks if selected value orbital period  ​​will be rendered on screen", async () => {

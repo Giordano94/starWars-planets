@@ -44,6 +44,7 @@ export default function Form() {
       <p key={ index } data-testid="filter">
         {`${filter.filterColumn} ${filter.filterComparison} ${filter.filterValue}`}
         <button
+          data-testid="remove-only-one"
           type="button"
           onClick={ () => btnRemoveOnlyOneFilter(filter.filterColumn) }
         >
