@@ -19,6 +19,28 @@ export default function Provider({ children }) {
   const [noRepeatColumn, setNoRepeatColumns] = useState(DEFAULT_OPTIONS_LIST);
   const [filtersOnScreen, setFiltersOnScreen] = useState([]);
   const [returnApiDefault, setReturnApiDefault] = useState([]);
+  /*   const [sortBy, setSortBy] = useState({
+    column: 'orbital_period',
+    sortType: 'asc',
+  }); */
+
+  /* const onClickSortColumn = useCallback(
+    (column) => {
+      setSortBy((prevState) => {
+        if (prevState.column === column) {
+          return {
+            ...prevState,
+            sortType: prevState.sortType === 'asc' ? 'desc' : 'asc',
+          };
+        }
+        return {
+          column,
+          sortType: 'asc',
+        };
+      });
+    },
+    [setSortBy],
+  ); */
 
   const handleFilterByName = (name) => {
     setFilterName(name);
@@ -41,42 +63,11 @@ export default function Provider({ children }) {
     setNoRepeatColumns(filtered);
     setFilterColumn(filtered[0]);
 
-    if (filterComparison === 'maior que') {
-      const biggerThan = dataAPI.filter(
-        (planet) => Number(planet[filterColumn]) > Number(filterValue),
-      );
-      setDataAPI(biggerThan);
-    }
-    if (filterComparison === 'menor que') {
-      const lessThan = dataAPI.filter(
-        (planet) => Number(planet[filterColumn]) < Number(filterValue),
-      );
-      setDataAPI(lessThan);
-    }
-    if (filterComparison === 'igual a') {
-      const equalTo = dataAPI.filter(
-        (planet) => Number(planet[filterColumn]) === Number(filterValue),
-      );
-      setDataAPI(equalTo);
-    }
-    const listFiltersOnScreen = [
-      ...filtersOnScreen,
-      {
-        filterColumn,
-        filterComparison,
-        filterValue,
-      },
-    ];
-
-    setFiltersOnScreen(listFiltersOnScreen);
-  }, [
-    noRepeatColumn,
-    filterComparison,
-    filtersOnScreen,
-    filterColumn,
-    filterValue,
-    dataAPI,
-  ]);
+    setFiltersOnScreen((prevState) => [
+      ...prevState,
+      { filterColumn, filterComparison, filterValue },
+    ]);
+  }, [noRepeatColumn, filterColumn, filterComparison, filterValue]);
 
   const fetchAPI = async () => {
     const url = 'https://swapi.dev/api/planets';

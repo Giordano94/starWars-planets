@@ -238,7 +238,7 @@ describe("tests StarWars", () => {
     const removeOneBtn = screen.getByTestId(buttonRemoveOne);
     userEvent.click(removeOneBtn);
 
-  
+
   });
 
   test(" checks if selected value orbital period  ​​will be rendered on screen", async () => {
@@ -280,9 +280,6 @@ describe("tests StarWars", () => {
       const planets = screen.getAllByTestId("planet-infos");
       expect(planets).toHaveLength(7);
     });
-
-    /* const filterScreen = screen.getByText(/orbital_period menor que 500/i);
-    expect(filterScreen).toBeInTheDocument() */
 
     // screen.logTestingPlaygroundURL();
   });

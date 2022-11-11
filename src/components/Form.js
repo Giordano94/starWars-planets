@@ -14,21 +14,15 @@ export default function Form() {
   const btnRemoveOnlyOneFilter = useCallback(
     (column) => {
       const filter = filtersOnScreen.filter((el) => el.filterColumn !== column);
-      console.log('filter', filter);
-      console.log('column', column);
       setFiltersOnScreen(filter);
       const options = stateComparison.filter(
         (el) => !filter.map((item) => item.filterColumn).includes(el),
       );
-      console.log('stateComparison', stateComparison);
-      console.log('options', options);
-      console.log('noRepeatColumn', noRepeatColumn);
       setNoRepeatColumns(options);
       setFilterColumn(options[0]);
     },
     [
       filtersOnScreen,
-      noRepeatColumn,
       setFilterColumn,
       setFiltersOnScreen,
       setNoRepeatColumns,
